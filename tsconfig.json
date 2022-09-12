@@ -17,5 +17,6 @@
       "src/*": ["src/*"]
     }
   },
+  "include": ["src", "**/*"],
   "exclude": ["./dist"]
 }

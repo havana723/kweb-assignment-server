@@ -1,12 +1,13 @@
 import { Prisma, PrismaClient } from "@prisma/client";
+import bcrypt from "bcrypt";
 import { RequestHandler } from "express";
-import { ErrorResponse } from "../types/Error";
+import { ErrorResponse } from "../../types/Error";
 
 const post: RequestHandler = async (req, res, next) => {
   try {
     const { username, password, name, uniqueId, role } = req.body;
 
-    if (typeof username !== "string" || typeof password != "string") {
+    if (typeof username !== "string" || typeof password !== "string") {
       res.status(400).send({
         error: "Invalid username or password type.",
       });
@@ -29,6 +30,7 @@ const post: RequestHandler = async (req, res, next) => {
       } as ErrorResponse);
       return;
     }
+    const passwordHash = await bcrypt.hashSync(password, 10);
 
     if (typeof name !== "string" || name.length > 512) {
       res.status(400).send({
@@ -57,7 +59,7 @@ const post: RequestHandler = async (req, res, next) => {
       const user = await prisma.user.create({
         data: {
           username,
-          passwordHash: password,
+          passwordHash,
           name,
           uniqueId,
           role,

@@ -4,6 +4,7 @@ import express from "express";
 import helmet from "helmet";
 import api from "./api";
 import config from "./config";
+import auth from "./middlewares/auth";
 import { app } from "./server";
 
 app.use(helmet());
@@ -22,6 +23,7 @@ app.use(
 );
 app.use(express.urlencoded({ extended: false }));
 
+app.use(auth);
 app.use("/api", api);
 
 app.listen(config.PORT || 3001, () => {
