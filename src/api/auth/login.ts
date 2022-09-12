@@ -22,6 +22,7 @@ const post: RequestHandler = async (req, res, next) => {
         username: username,
       },
     });
+
     if (
       user?.passwordHash &&
       (await bcrypt.compare(password, user?.passwordHash))
@@ -31,7 +32,10 @@ const post: RequestHandler = async (req, res, next) => {
         maxAge: config.TOKEN_EXPIRE,
       });
       res.send();
-    } else res.status(401).send({ error: "Not logged in." } as ErrorResponse);
+    } else
+      res
+        .status(401)
+        .send({ error: "Invalid username or password" } as ErrorResponse);
   } catch (err) {
     next(err);
   }
