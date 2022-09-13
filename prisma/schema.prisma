@@ -23,7 +23,7 @@ model User {
 
 model Course {
   id          Int          @id @default(autoincrement())
-  courseId    String       @unique @db.VarChar(10)
+  courseId    String       @unique @db.VarChar(8)
   courseName  String       @db.VarChar(512)
   professor   User         @relation(fields: [professorId], references: [id])
   professorId Int

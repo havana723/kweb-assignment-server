@@ -6,7 +6,7 @@ const get: RequestHandler = async (req, res, next) => {
   try {
     if (!req.user) {
       res.status(401).send({
-        error: "unauthroized",
+        error: "Unauthorized.",
       } as ErrorResponse);
       return;
     }
