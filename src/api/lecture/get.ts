@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { RequestHandler } from "express";
-import CourseResponse, { toCourseResponse } from "src/types/CourseResponse";
 import { ErrorResponse } from "src/types/Error";
+import { toLectureResponse } from "src/types/LectureResponse";
 
 const get: RequestHandler = async (req, res, next) => {
   try {
@@ -12,23 +12,34 @@ const get: RequestHandler = async (req, res, next) => {
       return;
     }
 
-    const courseId = req.query.courseId;
+    const lectureId = req.query.lectureId;
 
-    if (!courseId || typeof courseId !== "string") {
-      res.status(400).send({ error: "Invalid courseId." } as ErrorResponse);
+    if (
+      !lectureId ||
+      typeof lectureId !== "string" ||
+      Number.isNaN(+lectureId)
+    ) {
+      res.status(400).send({ error: "Invalid lectureId." } as ErrorResponse);
       return;
     }
 
     const prisma = new PrismaClient();
-    const course = await prisma.course.findUnique({
+
+    const lectureCourse = await prisma.lecture.findUnique({
       where: {
-        courseId,
+        id: +lectureId,
+      },
+      include: {
+        course: true,
       },
     });
-    if (!course) {
-      res.status(404).send({ error: "Course not found." } as ErrorResponse);
+
+    if (!lectureCourse) {
+      res.status(404).send({ error: "Lecture not found." } as ErrorResponse);
       return;
     }
+
+    const { course, ...lecture } = lectureCourse;
 
     const isStudent = !!(await prisma.userCourse.findUnique({
       where: {
@@ -48,13 +59,13 @@ const get: RequestHandler = async (req, res, next) => {
       return;
     }
 
-    const courseResponse: CourseResponse = await toCourseResponse(
-      course,
-      true,
-      isProfessor
+    const lectureResponse = await toLectureResponse(
+      lecture,
+      course.courseId,
+      course.courseName
     );
 
-    res.status(200).send(courseResponse);
+    res.status(200).send(lectureResponse);
   } catch (err) {
     next(err);
   }

@@ -3,13 +3,15 @@ import { Lecture, PrismaClient } from "@prisma/client";
 export default interface LectureResponse {
   id: number;
   courseId: string;
+  courseName?: string;
   lectureTitle: string;
   lectureContent: string;
 }
 
 export const toLectureResponse = async (
   lecture: Lecture,
-  courseId?: string
+  courseId?: string,
+  courseName?: string
 ): Promise<LectureResponse> => {
   const prisma = new PrismaClient();
   return {
@@ -19,6 +21,7 @@ export const toLectureResponse = async (
       (await prisma.course.findUnique({ where: { id: lecture.courseId } }))
         ?.courseId ??
       "",
+    courseName: courseName ?? undefined,
     lectureTitle: lecture.lectureTitle,
     lectureContent: lecture.lectureContent,
   };
