@@ -46,6 +46,8 @@ model UserCourse {
   studentId Int
   course    Course @relation(fields: [courseId], references: [id])
   courseId  Int
+
+  @@unique([studentId, courseId])
 }
 
 enum Role {

@@ -1,12 +1,10 @@
 import { Router } from "express";
 import get from "./get";
-import list from "./list";
-import post from "./post";
+import my from "./my";
 
 const router = Router();
 
 router.get("", get);
-router.post("", post);
-router.use("/list", list);
+router.get("/my", my);
 
 export default router;
