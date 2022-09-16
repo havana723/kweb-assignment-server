@@ -36,7 +36,7 @@ const get: RequestHandler = async (req, res, next) => {
       },
     });
 
-    const lectureResponses = Promise.all(
+    const lectureResponses = await Promise.all(
       lectureCourses.map((l) =>
         toLectureResponse(l, l.course.courseId, l.course.courseName)
       )
