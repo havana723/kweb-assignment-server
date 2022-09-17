@@ -13,7 +13,7 @@ const get: RequestHandler = async (req, res, next) => {
     }
 
     if (req.user.role !== "STUDENT") {
-      res.status(401).send({
+      res.status(403).send({
         error: "Permission Denied.",
       } as ErrorResponse);
       return;
