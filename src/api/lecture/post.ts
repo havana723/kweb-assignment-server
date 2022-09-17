@@ -43,7 +43,7 @@ const post: RequestHandler = async (req, res, next) => {
 
     if (!course) {
       res.status(404).send({
-        error: "Course does not exist.",
+        error: "Course not found.",
       } as ErrorResponse);
       return;
     }
