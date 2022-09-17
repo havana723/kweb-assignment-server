@@ -24,7 +24,7 @@ const get: RequestHandler = async (req, res, next) => {
     const userCourses = await prisma.userCourse.findMany({
       where: { studentId: req.user.id },
     });
-    const courseIds = userCourses.map((c) => c.id);
+    const courseIds = userCourses.map((c) => c.courseId);
 
     const lectureCourses = await prisma.lecture.findMany({
       where: { courseId: { in: courseIds } },

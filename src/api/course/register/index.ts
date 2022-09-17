@@ -3,6 +3,6 @@ import post from "./post";
 
 const router = Router();
 
-router.post("", post);
+router.post("/", post);
 
 export default router;

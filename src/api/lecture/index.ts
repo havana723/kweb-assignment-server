@@ -5,8 +5,8 @@ import recents from "./recents";
 
 const router = Router();
 
-router.get("", get);
-router.post("", post);
+router.get("/", get);
+router.post("/", post);
 router.get("/recents", recents);
 
 export default router;

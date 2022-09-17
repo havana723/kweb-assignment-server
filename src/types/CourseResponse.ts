@@ -1,19 +1,16 @@
 import { Course, PrismaClient } from "@prisma/client";
 import LectureResponse, { toLectureResponse } from "./LectureResponse";
-import UserResponse, { toUserResponse } from "./UserResponse";
 
 export default interface CourseResponse {
   courseId: string;
   courseName: string;
   professorName: string;
   lectures?: LectureResponse[];
-  students?: UserResponse[];
 }
 
 export const toCourseResponse = async (
   course: Course,
-  needLecture?: boolean,
-  needStudents?: boolean
+  needLecture?: boolean
 ): Promise<CourseResponse> => {
   const prisma = new PrismaClient();
   return {
@@ -37,14 +34,6 @@ export const toCourseResponse = async (
             })
           ).map((l) => toLectureResponse(l, course.courseId))
         )
-      : undefined,
-    students: needStudents
-      ? (
-          await prisma.userCourse.findMany({
-            where: { courseId: course.id },
-            include: { student: true },
-          })
-        ).map((i) => toUserResponse(i.student))
       : undefined,
   };
 };

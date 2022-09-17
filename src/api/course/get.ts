@@ -48,11 +48,7 @@ const get: RequestHandler = async (req, res, next) => {
       return;
     }
 
-    const courseResponse: CourseResponse = await toCourseResponse(
-      course,
-      true,
-      isProfessor
-    );
+    const courseResponse: CourseResponse = await toCourseResponse(course, true);
 
     res.status(200).send(courseResponse);
   } catch (err) {
