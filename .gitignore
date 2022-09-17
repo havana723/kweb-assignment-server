@@ -3,6 +3,7 @@
 # dependencies
 node_modules
 migrations
+dbml
 /.pnp
 .pnp.js
 
